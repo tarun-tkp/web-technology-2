@@ -1,61 +1,66 @@
-// script.js — jQuery validation + photo preview + print/download
+// script.js — jQuery validation + photo preview + print/download// Runs on GitHub – No PHP needed.
+// Displays formatted result using only JavaScript.
+
 $(function(){
 
-  // Photo preview
-  $('#photo').on('change', function(e){
-    const file = this.files && this.files[0];
-    const preview = $('#photoPreview');
-    preview.empty();
-    if (!file) return;
-    if (!file.type.startsWith('image/')) {
-      preview.text('Please select an image file.');
-      return;
-    }
-    if (file.size > 1_000_000) {
-      preview.text('Image too large (max 1MB).');
-      return;
-    }
-    const reader = new FileReader();
-    reader.onload = function(ev){
-      $('<img>').attr('src', ev.target.result).appendTo(preview);
+  $("#regForm").on("submit", function(e){
+    e.preventDefault();
+
+    // Collect values
+    let data = {
+      firstName: $("#firstName").val(),
+      lastName: $("#lastName").val(),
+      email: $("#email").val(),
+      phone: $("#phone").val(),
+      dob: $("#dob").val() || "N/A",
+      gender: $("#gender").val() || "N/A",
+      address: $("#address").val() || "N/A",
+      course: $("#course").val()
     };
-    reader.readAsDataURL(file);
-  });
 
-  // Client-side validation before submit
-  $('#regForm').on('submit', function(e){
-    $('.field-error').remove();
-    let valid = true;
-
-    const first = $('#firstName').val().trim();
-    const email = $('#email').val().trim();
-    const phone = $('#phone').val().trim();
-    const course = $('#course').val().trim();
-
-    if (!first) { showErr('#firstName','First name is required'); valid = false; }
-    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { showErr('#email','Valid email is required'); valid = false; }
-    const digits = phone.replace(/\D/g,'');
-    if (!phone || digits.length < 7 || digits.length > 15) { showErr('#phone','Phone must be 7–15 digits'); valid = false; }
-    if (!course) { showErr('#course','Course is required'); valid = false; }
-
-    if (!valid) {
-      e.preventDefault();
-      $('html,body').animate({scrollTop:($('.field-error').first().offset().top - 80)}, 300);
+    // Simple validation
+    if(data.firstName.trim() === "" || data.email.trim() === "" || data.phone.trim() === "" || data.course.trim() === ""){
+      alert("Please fill all required fields.");
+      return;
     }
-  });
 
-  function showErr(selector, text){
-    $('<div class="field-error" style="color:#e02424;margin-top:6px">'+text+'</div>').insertAfter(selector);
-  }
+    // Build result HTML
+    let html = `
+      <h2>Application Submitted Successfully</h2>
+      <div class="result-row">
+        <div class="result-label">Full Name</div>
+        <div class="result-value">${data.firstName} ${data.lastName}</div>
+      </div>
+      <div class="result-row">
+        <div class="result-label">Email</div>
+        <div class="result-value">${data.email}</div>
+      </div>
+      <div class="result-row">
+        <div class="result-label">Phone</div>
+        <div class="result-value">${data.phone}</div>
+      </div>
+      <div class="result-row">
+        <div class="result-label">Date of Birth</div>
+        <div class="result-value">${data.dob}</div>
+      </div>
+      <div class="result-row">
+        <div class="result-label">Gender</div>
+        <div class="result-value">${data.gender}</div>
+      </div>
+      <div class="result-row">
+        <div class="result-label">Address</div>
+        <div class="result-value">${data.address.replace(/\n/g, "<br>")}</div>
+      </div>
+      <div class="result-row">
+        <div class="result-label">Course Applied For</div>
+        <div class="result-value">${data.course}</div>
+      </div>
+    `;
 
-  // Print button (on result page)
-  $('#printBtn').on('click', function(){
-    window.print();
-  });
-
-  // Download page as PNG (simple approach: use html2canvas if you want nicer export)
-  $('#downloadBtn').on('click', function(){
-    alert('Use Print → Save as PDF in the print dialog, or take a screenshot. For automatic PNG export add html2canvas.');
+    // Hide form, show result
+    $("#regForm").hide();
+    $("#result").html(html).fadeIn();
   });
 
 });
+
