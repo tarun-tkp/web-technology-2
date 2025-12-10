@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Online Application / Registration Form</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="css/styles.css">
+
+  <!-- jQuery CDN -->
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  <script src="js/script.js" defer></script>
+</head>
+
+<body>
+  <div class="container">
+
+    <h1>Online Registration Form</h1>
+
+    <!-- Form -->
+    <form id="regForm">
+      <div class="grid">
+
+        <div class="form-group">
+          <label>First Name <span class="req">*</span></label>
+          <input type="text" id="firstName" required>
+        </div>
+
+        <div class="form-group">
+          <label>Last Name</label>
+          <input type="text" id="lastName">
+        </div>
+
+        <div class="form-group">
+          <label>Email <span class="req">*</span></label>
+          <input type="email" id="email" required>
+        </div>
+
+        <div class="form-group">
+          <label>Phone <span class="req">*</span></label>
+          <input type="tel" id="phone" required>
+        </div>
+
+        <div class="form-group">
+          <label>Date of Birth</label>
+          <input type="date" id="dob">
+        </div>
+
+        <div class="form-group">
+          <label>Gender</label>
+          <select id="gender">
+            <option value="">-- Select --</option>
+            <option>Male</option>
+            <option>Female</option>
+            <option>Other</option>
+          </select>
+        </div>
+
+        <div class="form-group full">
+          <label>Address</label>
+          <textarea id="address" rows="3"></textarea>
+        </div>
+
+        <div class="form-group">
+          <label>Course Applied For <span class="req">*</span></label>
+          <input type="text" id="course" required>
+        </div>
+
+      </div>
+
+      <button type="submit" class="btn">Submit</button>
+      <button type="reset" class="btn ghost">Reset</button>
+
+      <p class="note">Fields marked with <span class="req">*</span> are required.</p>
+    </form>
+
+    <!-- Display Result -->
+    <div id="result" class="result-card" style="display:none;"></div>
+
+  </div>
+</body>
+</html>
